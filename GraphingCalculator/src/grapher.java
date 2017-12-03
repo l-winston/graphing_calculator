@@ -11,21 +11,22 @@ public class grapher {
 
 	static JFrame frame = new JFrame("graph");
 	static BufferedImage image = new BufferedImage(500, 500, BufferedImage.TYPE_INT_RGB);
-	static final double HORIZONTAL_STRETCH = 5;
-	static final double VERTICAL_STRETCH = 5;
+	static final double HORIZONTAL_STRETCH = 50;
+	static final double VERTICAL_STRETCH = 20;
 	public static void main(String[] args) {
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.pack();
 		frame.getContentPane().add(new JLabel(new ImageIcon(image)));
 
-		setWhite(image);
+		setWhite();
+		drawAxes();
 
-		for (double x = image.getWidth() / -2.0; x < image.getWidth() / 2.0; x+= 0.1) {
-			double y = function(x/HORIZONTAL_STRETCH);
+		for (double x = image.getWidth() / -2.0; x < image.getWidth() / 2.0; x+= 0.01) {
+			double y = function(x/HORIZONTAL_STRETCH) * VERTICAL_STRETCH;
 			if (y < image.getHeight() / 2.0 && y >= image.getHeight() / -2.0) {
 				
-				Point p = new Point(x*VERTICAL_STRETCH, y).toImageCoordinates();
+				Point p = new Point(x, y).toImageCoordinates();
 				paintPoint(p.x, p.y);
 				System.out.println(x + " " + y);
 				try {
@@ -47,7 +48,16 @@ public class grapher {
 		} catch (ArrayIndexOutOfBoundsException e) {}
 		}
 	
-	public static void setWhite(BufferedImage image) {
+	public static void drawAxes(){
+		for(double i = 0; i < image.getWidth(); i+=0.1){
+			paintPoint(i, image.getHeight()/2);
+		}
+		for(double j = 0; j < image.getHeight(); j+=0.1){
+			paintPoint(image.getWidth()/2, j);
+		}
+	}
+	
+	public static void setWhite() {
 		for (int i = 0; i < image.getHeight(); i++) {
 			for (int j = 0; j < image.getWidth(); j++) {
 				image.setRGB(i, j, new Color(255, 255, 255).getRGB());
@@ -57,7 +67,7 @@ public class grapher {
 
 	public static double function(double x) {
 
-		return Math.pow(x, 3);
+		return (x-1) * Math.pow((x-3), 2);
 	}
 	
 	public static void drawLine(Point a, Point b){
