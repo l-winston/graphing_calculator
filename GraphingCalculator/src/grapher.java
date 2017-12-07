@@ -24,9 +24,26 @@ public class grapher {
 
 		setWhite();
 		drawAxes();
+		
+//		for(double x = -image.getWidth()/2; x < image.getWidth()/2; x+= 0.2){
+//			for(double y = -image.getHeight()/2; y < image.getHeight()/2; y+= 0.2){
+//				if(f(x/HORIZONTAL_STRETCH, y)){
+//					Point p = new Point(x, y).toImageCoordinates();
+//					paintPoint(p.x, p.y);
+//					//System.out.println(x + " " + y);
+//					try {
+//						paintPoint(p.x - 1, p.y);
+//						paintPoint(p.x + 1, p.y);
+//						paintPoint(p.x, p.y - 1);
+//						paintPoint(p.x, p.y);
+//					} catch (ArrayIndexOutOfBoundsException e) {
+//					}
+//				}
+//			}
+//		}
 
 		for (double x = image.getWidth() / -2.0; x < image.getWidth() / 2.0; x += 0.01) {
-			double y = function(x / HORIZONTAL_STRETCH) * VERTICAL_STRETCH;
+			double y = f(x / HORIZONTAL_STRETCH) * VERTICAL_STRETCH;
 			if (y < image.getHeight() / 2.0 && y >= image.getHeight() / -2.0) {
 
 				Point p = new Point(x, y).toImageCoordinates();
@@ -96,8 +113,11 @@ public class grapher {
 		}
 	}
 
-	public static double function(double x) {
-
+	public static boolean f(double x, double y) {
+		return Math.round(y) == Math.round((1 / (1 + Math.pow(Math.E, -x)))*VERTICAL_STRETCH);
+	}
+	
+	public static double f(double x) {
 		return 1 / (1 + Math.pow(Math.E, -x));
 	}
 
